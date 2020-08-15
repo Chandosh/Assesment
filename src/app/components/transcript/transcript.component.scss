@@ -1,0 +1,83 @@
+.transcript-content {
+    height: calc(100% - 112px);
+    width: 100%;
+    overflow: hidden;
+}
+
+.profile-image {
+    width: 34px;
+    height: 34px;
+}
+
+.pending-image {
+    width: 306px;
+    height: 250px;
+}
+
+.pending-header {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+}
+.pending-message {
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+}
+.pr-5 {
+    padding-right: 5px;
+}
+.main-content {
+    padding: 32px 32px 72px 32px;
+}
+
+.table-container {
+    background: #FFFFFF;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    .table-container-header {
+        background: #EFEFF1;
+        font-family: Roboto;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 28px;
+        padding : 0px 10px;
+        min-height: 40px;
+    }
+    .table-container-body {
+        padding: 24px;
+        max-height: calc(100vh - 306px);
+        overflow-y: scroll;
+    }
+}
+
+.mat-column-order {
+    width: 75px !important;
+    max-width: 75px !important;
+}
+.mat-column-similarity {
+    width: 75px !important;
+    max-width: 75px !important;
+}
+.mat-column-channel {
+    width: 75px !important;
+    max-width: 75px !important;
+}
+.mat-column-sentence {
+    width: calc(100% - 150px) !important;
+}
+
+.matching-sensitivity {
+    background: rgba(90, 90, 113, 0.2);
+    padding-left: 5px;
+    border-radius: 5px;
+}
+
+.darker {
+    background: rgba(90, 90, 113, 0.6)!important;
+    padding-left: 5px;
+    border-radius: 5px;
+}

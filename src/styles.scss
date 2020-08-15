@@ -1,0 +1,126 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-toolbar {
+    background: #5A5A71;    
+}
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 56px !important;
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+}
+.secondary-header {
+    background: #EFEFF1;
+    color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-label {
+    color: rgba(0, 0, 0, 0.54) !important;
+}
+.mat-form-field .mat-select.mat-select-disabled .mat-select-arrow {
+    color: rgba(0, 0, 0, 0.54) !important;
+}
+.mat-form-field {
+    .mat-form-field-wrapper {
+        padding: 15px 0px;
+        // padding-bottom: 15px;
+        .mat-form-field-flex {
+            padding: 0px;
+            height: 38px;
+            .mat-form-field-infix {
+                padding: 0px;
+                border: 0px;
+            }
+        }
+        .mat-form-field-underline {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.38);;
+        }
+    }
+}
+
+.mat-select-panel {
+    background: #FFFFFF;
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 48px;
+    .mat-option.mat-active {
+        color: rgba(0, 0, 0, 0.87);
+    }
+    .mat-option-text {
+        color: rgba(0, 0, 0, 0.87);
+    }
+}
+
+.mat-slider-ticks {
+    opacity: 0.5 !important;
+    background-color: #5A5A71 !important;
+}
+.mat-slider-thumb {
+    background: #5A5A71 !important;
+}
+.mat-table {
+    background: #FFFFFF;
+}
+.mat-header-cell {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.87);
+}
+.mat-header-row {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);;
+}
+.mat-cell {
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.toolTip-class {
+    background: rgba(97, 97, 97, 0.9);
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FFFFFF;
+    min-width: 450px;
+}
+
+
+/* === Scroll Bar Design - It Only Work in Chrome and Safari=== */
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 6px !important;
+  }
+  
+  /* Track */
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px #C4C4C4 !important;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  
+  ::-webkit-scrollbar-thumb {
+    background: #C4C4C4 !important;
+    border-radius: 10px !important;
+  }
+  
+  /* Handle on hover */
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C4C4C4 !important;
+  }
+  
+  /* === End of Scroll Bar Design === */

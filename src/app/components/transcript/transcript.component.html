@@ -1,0 +1,168 @@
+<mat-toolbar>
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        <span>{{transConstant?.contentText?.header}}</span>
+        <img class="profile-image" src="assets/images/profile.png"> 
+    </mat-toolbar-row>
+    <mat-toolbar-row class="secondary-header" fxLayout="row">
+    <div fxFlex="50%" fxLayoutAlign="none center" fxLayoutGap="20px">
+        <mat-form-field appearance="fill" floatLabel=never>
+            <mat-icon matPrefix class="pr-5">supervised_user_circle</mat-icon>
+            <mat-select [(ngModel)]="selectedAgent" (ngModelChange)="agentChanged()">
+              <mat-option *ngFor="let agent of agentData" [value]="agent.agent_id">
+                {{agent.full_name}}
+              </mat-option>
+            </mat-select>
+            <mat-label>{{transConstant?.dropdownTeaxt?.agent}}</mat-label>
+          </mat-form-field>
+        <mat-form-field appearance="fill" floatLabel="never">
+            <mat-icon matPrefix class="pr-5">filter_list</mat-icon>
+            <mat-select [(ngModel)]="selectedType" (ngModelChange)="typeChanged()">
+                <mat-option *ngFor="let ty of type" [value]="ty.calltype_id">
+                    {{ty.name}}
+                </mat-option>
+            </mat-select>
+            <mat-label>{{transConstant?.dropdownTeaxt?.type}}</mat-label>
+        </mat-form-field>
+        <mat-form-field appearance="fill" floatLabel="never">
+            <mat-icon matPrefix class="pr-5">call</mat-icon>
+            <mat-select [(ngModel)]="selectedCall" (ngModelChange)="callChanged()" [disabled]="!selectedAgent && !selectedType">
+                <mat-option *ngFor="let filteredCall of filteredCallType" [value]="filteredCall">
+                    {{filteredCall.customer_display_name}}
+                </mat-option>
+            </mat-select>
+            <mat-label>{{transConstant?.dropdownTeaxt?.call}}</mat-label>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50%" fxLayout="row" fxLayoutAlign="end center" *ngIf="selectedTranscript.length > 0">
+        <span>
+            MATCHING SENSITIVITY
+        </span>
+        <mat-slider (change)="calculateSensitivity()" fxFlex="50%" min="1" max="100" step="1" [(ngModel)]="sensitivity" [disabled]="!selectedTranscript || !selectedTranscript.length"></mat-slider>
+        <span>
+            {{sensitivity}}%
+        </span>
+    </div>
+</mat-toolbar-row>
+
+
+</mat-toolbar>
+
+<div class="transcript-content">
+    <!-- Null content -->
+    <div *ngIf="!selectedTranscript || !selectedTranscript.length" fxFlex="100%" fxLayout="column" fxLayoutAlign="center center">
+        <img class="pending-image" src="assets/images/selection-pending.png">
+        <span class="pending-header"> {{transConstant?.emptySelection?.pending}}</span>
+        <span class="pending-message">
+            {{transConstant?.emptySelection?.pendingMessage1}}<br>
+            {{transConstant?.emptySelection?.pendingMessage2}}
+        </span>
+    </div>
+    <div *ngIf="selectedTranscript && selectedTranscript.length > 0" fxFlex="100%" fxLayout="row" class="main-content">
+        <div fxFill fxFlex="49%">
+            <div class="table-container">
+                <div class="table-container-header" fxLayout="row">
+                    <span fxFlex="50%" fxLayoutAlign="start center">
+                        Real
+                    </span>
+                    <span fxFlex="50%" fxLayoutAlign="end center">
+                        {{realMatch}}%&nbsp;&nbsp;<app-pie-chart [data]="real"></app-pie-chart>
+                    </span>
+                </div>
+                <div class="table-container-body">
+                    <table mat-table [dataSource]="selectedTranscript[0]?.transcript">
+                        <!-- Time Column -->
+                        <ng-container matColumnDef="similarity">
+                          <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.timeFrom | customTime}}  </mat-cell>
+                        </ng-container>
+                      
+                        <!-- Speaker Column -->
+                        <ng-container matColumnDef="channel">
+                          <mat-header-cell *matHeaderCellDef> Speaker </mat-header-cell>
+                          <mat-cell *matCellDef="let element;index as i">
+                          <span *ngIf="element.channel == agentChannel && i === 0">
+                            {{agentName}}
+                          </span>  
+                          <span *ngIf="element.channel == customerChannel && i === 0">
+                            {{customerName}}
+                          </span>  
+                          <span *ngIf="element.channel == agentChannel && (i > 0 && selectedTranscript[0]?.transcript[i-1].channel != element.channel)">
+                            {{agentName}}
+                          </span>  
+                          <span *ngIf="element.channel == customerChannel && (i > 0 && selectedTranscript[0]?.transcript[i-1].channel != element.channel)">
+                            {{customerName}}
+                          </span>  
+                          
+                          <span *ngIf="element.channel != agentChannel && element.channel != customerChannel">
+                            Unknown
+                          </span>  
+                          </mat-cell>
+                        </ng-container>
+                      
+                        <!-- Sentence Column -->
+                        <ng-container matColumnDef="sentence">
+                          <mat-header-cell *matHeaderCellDef> Sentence </mat-header-cell>
+                          <mat-cell  *matCellDef="let element;index as i"
+                          [ngClass]="{'matching-sensitivity': (element.sentence && element.matching_sentence && (element.similarity * 100) > sensitivity),
+                            'darker': (element.order === darkHighlightTranscript)}"
+                             [matTooltip]="selections(element.order)" matTooltipClass="toolTip-class">
+                                {{element.sentence}}
+                               </mat-cell>
+                        </ng-container>
+                      
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"
+                        (mouseover)="handleMouseOver(row)" 
+                        (mouseleave)="handleMouseLeave(row)"
+                        ></mat-row>
+                      </table>
+                </div>
+
+            </div>
+        </div>
+        <div fxFlex="2%">
+
+        </div>
+        <div fxFill fxFlex="49%">
+            <div class="table-container">
+                <div class="table-container-header" fxLayout="row">
+                    <span fxFlex="50%" fxLayoutAlign="start center">
+                        Expected
+                    </span>
+                    <span fxFlex="50%" fxLayoutAlign="end center">
+                        {{expectedMatch}}%&nbsp;&nbsp;<app-pie-chart [data]="expected"></app-pie-chart>
+                    </span>
+                </div>
+                <div class="table-container-body">
+                    <table mat-table [dataSource]="selectedTranscript[0]?.script">
+                        <!-- Time Column -->
+                        <ng-container matColumnDef="order">
+                          <mat-header-cell *matHeaderCellDef> Line </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.order + 1}} </mat-cell>
+                        </ng-container>
+                      
+                        <!-- Speaker Column -->
+                        <ng-container matColumnDef="similarity">
+                          <mat-header-cell *matHeaderCellDef> Speaker </mat-header-cell>
+                          <mat-cell *matCellDef="let element"> Rep: </mat-cell>
+                        </ng-container>
+                      
+                        <!-- Sentence Column -->
+                        <ng-container matColumnDef="sentence">
+                          <mat-header-cell *matHeaderCellDef> Sentence </mat-header-cell>
+                          <mat-cell *matCellDef="let element"
+                          [ngClass]="{'matching-sensitivity': element.sentence && element.matching_sentence && (element.similarity * 100) > sensitivity,
+                          'darker': element.order === darkHighLightScript}">
+                           {{element.sentence}} 
+                        </mat-cell>
+                        </ng-container>
+                      
+                        <mat-header-row *matHeaderRowDef="scriptDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: scriptDisplayedColumns;sticky: true;"></mat-row>
+                      </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
